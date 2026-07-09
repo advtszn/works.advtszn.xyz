@@ -1,0 +1,100 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Container from "~/components/common/container.astro";
+import { ArrowLeft } from "lucide-astro";
+---
+
+<Layout>
+  <main>
+
+    <Container>
+      <div class="space-y-6">
+        <a href="/" class="text-muted-foreground flex items-center pt-2"
+          ><ArrowLeft size={16} className="mr-1.5" /> Back to works</a
+        >
+        <h1 class="uppercase text-3xl font-serif font-medium pb-6">Oilstream Solutions</h1>
+
+        <div class="flex flex-col gap-12 md:flex-row items-start justify-between">
+        <div class="md:w-1/2">
+          <div class="flex gap-6 md:gap-12 flex-col">
+            <div class="space-y-1">
+              <h2 class="text-lg font-serif uppercase font-medium">Timeline</h2>
+              <p class="text-muted-foreground">1 month</p>
+            </div>
+            <div class="space-y-1">
+              <h2 class="text-lg font-serif uppercase font-medium">Live</h2>
+              <p class="text-muted-foreground"><a href="https://oilstreamsolutions.in/" target="_blank" class="underline underline-offset-4 hover:text-foreground transition-colors">oilstreamsolutions.in</a></p>
+            </div>
+            <div class="space-y-1">
+              <h2 class="text-lg font-serif uppercase font-medium">Tech</h2>
+              <p class="text-muted-foreground">nextjs, sanity cms</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:w-1/2">
+          <div class="flex gap-6 md:gap-12 flex-col">
+            <div class="space-y-1">
+              <h2 class="text-lg font-serif uppercase font-medium">Overview</h2>
+              <p class="text-muted-foreground">A corporate website for Oilstream Solutions — designed and built to give them a proper web presence with CMS-managed content they can update without a developer.</p>
+            </div>
+            <div class="space-y-1">
+              <h2 class="text-lg font-serif uppercase font-medium">Problems Solved</h2>
+              <p class="text-muted-foreground">No existing web presence to represent the business online. No way for the team to update content without going through a developer. No structured format to showcase their products and services to potential clients.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+    </Container>
+
+    <Container>
+      <article class="space-y-6">
+        <h2 class="text-2xl font-serif uppercase font-medium">Product screenshots</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-12">
+          <figure>
+            <img
+              class="rounded"
+              data-lightbox
+              src="/images/oilstream-solutions/ipad-hero.png"
+              alt="Oilstream Solutions hero section on iPad"
+            />
+          </figure>
+
+          <figure>
+            <img
+              class="rounded"
+              data-lightbox
+              src="/images/oilstream-solutions/desktop-features.png"
+              alt="Oilstream Solutions features section on desktop"
+            />
+          </figure>
+
+          <figure>
+            <img
+              class="rounded"
+              data-lightbox
+              src="/images/oilstream-solutions/phone-hero.png"
+              alt="Oilstream Solutions hero section on mobile"
+            />
+          </figure>
+
+          <figure>
+            <img
+              class="rounded"
+              data-lightbox
+              src="/images/oilstream-solutions/phone-faq.png"
+              alt="Oilstream Solutions FAQ section on mobile"
+            />
+          </figure>
+        </div>
+
+      </article>
+    </Container>
+
+    <Container>
+    </Container>
+  </main>
+</Layout>

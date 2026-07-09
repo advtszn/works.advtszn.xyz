@@ -1,44 +1,53 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Container from "~/components/common/container.astro";
-import { Image } from "astro:assets";
 
-const works = await getCollection("work");
-
-const formatDate = (date: Date): string => {
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  return `${month}/${date.getFullYear()}`;
-};
+const works = [
+	{
+		slug: "superbai",
+		title: "SUPERBAI",
+		type: "freelance",
+		role: "web design and development",
+		thumbnail: "/images/superbai/dashboard-main.png",
+	},
+	{
+		slug: "oilstream-solutions",
+		title: "Oilstream Solutions",
+		type: "freelance",
+		role: "web design and development",
+		thumbnail: "/images/oilstream-solutions/ipad-hero.png",
+	},
+];
 ---
 
 <Layout>
   <main>
     <Container>
-      <div class="space-y-6">
-        <h1 class="font-serif text-4xl italic md:text-6xl">works</h1>
-        <div class="border-t w-full"></div>
-        <div class="grid grid-cols-2 gap-6">
+      <div class="space-y-12">
+        <h1 class="font-serif font-medium text-4xl uppercase">
+          works <span
+            class="text-xl normal-case text-muted-foreground font-medium font- hover:text-foreground transition-colors duration-150"
+            ><a href="https://advtszn.xyz" target="_blank">by advtszn</a></span
+          >
+        </h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           {
             works.map((work) => (
-              <a href={`/${work.id}`} class="space-y-4">
-                <Image
-                  src={work.data.thumbnail}
-                  width={1024}
-                  height={1024}
-                  alt={work.data.title}
-                />
-                <div class="space-y-2">
-                  <div class="flex items-center justify-between">
-                    <h2 class="font-serif text-3xl">
-                      {work.data.title.toUpperCase()}
-                    </h2>
-                    <p class="text-sm text-muted-foreground">
-                      {formatDate(work.data.date)}
-                    </p>
-                  </div>
-                  <p class="text-sm text-muted-foreground font-medium">
-                    {work.data.type} • {work.data.role.join(",")}
+              <a href={`/${work.slug}`} class="space-y-4 group">
+                <div class="aspect-video rounded group">
+                  <img
+                    src={work.thumbnail}
+                    class="h-full w-full object-cover rounded grayscale group-hover:grayscale-0 transition-all duration-500"
+                    alt={work.title}
+                  />
+                </div>
+                <div class="space-y-1">
+                  <h2 class="font-serif uppercase text-xl font-medium">
+                    {work.title}
+                  </h2>
+                  <p class="text-muted-foreground font-medium">
+                    {work.type} // {work.role}
                   </p>
                 </div>
               </a>

@@ -1,0 +1,113 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Container from "~/components/common/container.astro";
+import { ArrowLeft } from "lucide-astro";
+---
+
+<Layout>
+  <main>
+    
+
+    <Container>
+      <div class="space-y-6">
+        <a href="/" class="text-muted-foreground flex items-center pt-2"
+          ><ArrowLeft size={16} className="mr-1.5" /> Back to works</a
+        >
+        <h1 class="uppercase text-3xl font-serif font-medium pb-6">SUPERBAI</h1>
+
+        <div class="flex flex-col gap-12  md:flex-row items-start justify-between ">
+        <div class="md:w-1/2">
+          <div class="flex gap-6 md:gap-12 flex-col">
+            <div class="space-y-1">
+              <h2 class="text-lg font-serif uppercase font-medium">Timeline</h2>
+              <p class="text-muted-foreground">2 months</p>
+            </div>
+            <div class="space-y-1">
+              <h2 class="text-lg font-serif uppercase font-medium">Live</h2>
+              <p class="text-muted-foreground">[REDACTED]</p>
+            </div>
+            <div class="space-y-1">
+              <h2 class="text-lg font-serif uppercase font-medium">Tech</h2>
+              <p class="text-muted-foreground">nextjs, firestore, trpc</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:w-1/2">
+          <div class="flex gap-6 md:gap-12 flex-col">
+            <div class="space-y-1">
+              <h2 class="text-lg font-serif uppercase font-medium">Overview</h2>
+              <p class="text-muted-foreground">An internal dashboard for SUPERBAI's operations team to register maids, search by service and location, and manage admin records — replacing a workflow that ran on messages, spreadsheets, and memory.</p>
+            </div>
+            <div class="space-y-1">
+              <h2 class="text-lg font-serif uppercase font-medium">Problems Solved</h2>
+              <p class="text-muted-foreground">Maid registration was scattered across group chats and spreadsheets with no single source of truth. Finding the right maid for a request meant manually cross-referencing service type, time slot, and location. No consistent system for managing admin users and internal operational data.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      
+    </Container>
+
+    <Container>
+      <article class="space-y-6">
+        <h2 class="text-2xl font-serif uppercase font-medium">Product screenshots</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-12">
+          <figure>
+            <img
+              class="rounded"
+              data-lightbox
+              src="/images/superbai/dashboard-main.png"
+              alt="SUPERBAI dashboard overview showing internal collections and operational records"
+            />
+            <figcaption class="sr-only">
+              The main dashboard view keeps SUPERBAI's internal operations organized around clear collections.
+            </figcaption>
+          </figure>
+
+          <figure>
+            <img
+              class="rounded"
+              data-lightbox
+              src="/images/superbai/dashboard-add-maid.png"
+              alt="SUPERBAI add maid screen with a structured registration form"
+            />
+            <figcaption class="sr-only">
+              Maid registration was designed as a structured form, not another loose operational checklist.
+            </figcaption>
+          </figure>
+
+          <figure>
+            <img
+              class="rounded"
+              data-lightbox
+              src="/images/superbai/dashboard-maid-search.png"
+              alt="SUPERBAI maid search module with filters for service, time slot, and location"
+            />
+            <figcaption class="sr-only">
+              The maid search module turns service, time, and location constraints into a focused lookup workflow.
+            </figcaption>
+          </figure>
+
+          <figure>
+            <img
+              class="rounded"
+              data-lightbox
+              src="/images/superbai/dashboard-admin.png"
+              alt="SUPERBAI admin collection screen for managing internal users"
+            />
+            <figcaption class="sr-only">
+              Admin management follows the same collection pattern, keeping future internal workflows consistent.
+            </figcaption>
+          </figure>
+        </div>
+
+      </article>
+    </Container>
+
+    <Container>
+    </Container>
+  </main>
+</Layout>
