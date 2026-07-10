@@ -1,0 +1,63 @@
+---
+title: Listable Labs
+category: work
+role: backend
+tech:
+  - typescript
+  - nodejs
+  - expressjs
+  - mongodb
+  - react router
+url: https://listablelabs.com
+date: 2026-07-09
+thumbnail: /images/listable-labs/thumbnail.png
+timeline: 3 months
+overview: An AEO/GEO analytics platform that tracks how brands appear in LLM responses - share of voice, competitor mentions, geographic performance, and actionable recommendations to boost presence.
+contribution: Orchestrated prompts across multiple LLM providers with fallbacks and retries. Built the evaluation pipeline to generate, process and classify LLM responses into the metrics. Implemented a distributed lock pattern using MongoDB's atomic findAndUpdate for reliable background job processing. Designed and shipped multi-tenant blog infrastructure with custom domain support, DNS verification, and GEO-optimized blog sites.
+---
+
+## Product Screenshots
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-12">
+  <figure>
+    <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-overview.png" alt="Listable Labs dashboard overview with active projects and article metrics" />
+  </figure>
+  <figure>
+    <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-visibility.png" alt="Listable Labs visibility metrics showing share of voice and average position" />
+  </figure>
+  <figure>
+    <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-mentions.png" alt="Listable Labs mention metrics across LLM providers with position distribution" />
+  </figure>
+  <figure>
+    <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-prompts.png" alt="Listable Labs prompts table showing tracked prompts and their status" />
+  </figure>
+</div>
+
+## Deep Dive
+
+### The Evaluation Pipeline
+
+How prompts flow from tracking → LLM orchestration → response classification → metrics.
+
+<img class="rounded" data-lightbox src="/images/listable-labs/dashboard-prompt-detail.png" alt="Prompt detail view with response history and metrics" />
+
+### Suggestions Engine
+
+The benchmarking catalog: building self and competitor profiles from LLM response logs, classifying source sentiment, and generating deterministic recommendations.
+
+<img class="rounded" data-lightbox src="/images/listable-labs/dashboard-suggestions.png" alt="Suggestions dashboard with actionable recommendations for improving brand visibility" />
+
+### Multi-Tenant Blog Infrastructure
+
+Custom domain support, DNS verification, and GEO-optimized blog sites.
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+  <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-articles.png" alt="Articles table showing published blog content" />
+  <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-article-detail.png" alt="Article editor with rich text and metadata sidebar" />
+</div>
+
+### GSC Integration
+
+End-to-end integration with Google Search Console for automatic article indexing.
+
+<img class="rounded" data-lightbox src="/images/listable-labs/account-integrations.png" alt="Account integrations page showing Google Search Console connection" />

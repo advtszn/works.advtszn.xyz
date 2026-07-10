@@ -1,23 +1,11 @@
 ---
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Container from "~/components/common/container.astro";
 
-const works = [
-	{
-		slug: "superbai",
-		title: "SUPERBAI",
-		type: "freelance",
-		role: "web design and development",
-		thumbnail: "/images/superbai/dashboard-main.png",
-	},
-	{
-		slug: "oilstream-solutions",
-		title: "Oilstream Solutions",
-		type: "freelance",
-		role: "web design and development",
-		thumbnail: "/images/oilstream-solutions/ipad-hero.png",
-	},
-];
+const works = (await getCollection("work")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
 ---
 
 <Layout>
@@ -34,20 +22,20 @@ const works = [
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           {
             works.map((work) => (
-              <a href={`/${work.slug}`} class="space-y-4 group">
+              <a href={`/${work.id}`} class="space-y-4 group">
                 <div class="aspect-video rounded group">
                   <img
-                    src={work.thumbnail}
+                    src={work.data.thumbnail}
                     class="h-full w-full object-cover rounded grayscale group-hover:grayscale-0 transition-all duration-500"
-                    alt={work.title}
+                    alt={work.data.title}
                   />
                 </div>
                 <div class="space-y-1">
                   <h2 class="font-serif uppercase text-xl font-medium">
-                    {work.title}
+                    {work.data.title}
                   </h2>
                   <p class="text-muted-foreground font-medium">
-                    {work.type} // {work.role}
+                    {work.data.category} // {work.data.role}
                   </p>
                 </div>
               </a>
