@@ -1,7 +1,7 @@
 ---
 title: Oilstream Solutions
 category: freelance
-role: web design and development
+role: design & development
 tech:
   - nextjs
   - sanity cms
@@ -13,19 +13,17 @@ overview: A marketing website for Oilstream Solutions, designed and built to giv
 contribution: No existing web presence to represent the business online. No way for the team to update content without going through a developer. No structured format to showcase their products and services to potential clients.
 ---
 
+import Screenshot from "~/components/common/screenshot.astro";
+import thumbnail from "~/assets/images/oilstream-solutions/thumbnail.png";
+import desktopFeatures from "~/assets/images/oilstream-solutions/desktop-features.png";
+import phoneHero from "~/assets/images/oilstream-solutions/phone-hero.png";
+import phoneFaq from "~/assets/images/oilstream-solutions/phone-faq.png";
+
 ## PRODUCT SCREENSHOTS
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-12">
-  <figure>
-    <img class="rounded" data-lightbox src="/images/oilstream-solutions/thumbnail.png" alt="Oilstream Solutions hero section on iPad" />
-  </figure>
-  <figure>
-    <img class="rounded" data-lightbox src="/images/oilstream-solutions/desktop-features.png" alt="Oilstream Solutions features section on desktop" />
-  </figure>
-  <figure>
-    <img class="rounded" data-lightbox src="/images/oilstream-solutions/phone-hero.png" alt="Oilstream Solutions hero section on mobile" />
-  </figure>
-  <figure>
-    <img class="rounded" data-lightbox src="/images/oilstream-solutions/phone-faq.png" alt="Oilstream Solutions FAQ section on mobile" />
-  </figure>
+  <Screenshot src={thumbnail} alt="Oilstream Solutions hero section on iPad" />
+  <Screenshot src={desktopFeatures} alt="Oilstream Solutions features section on desktop" />
+  <Screenshot src={phoneHero} alt="Oilstream Solutions hero section on mobile" />
+  <Screenshot src={phoneFaq} alt="Oilstream Solutions FAQ section on mobile" />
 </div>

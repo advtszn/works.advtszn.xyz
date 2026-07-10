@@ -16,21 +16,24 @@ overview: An AEO/GEO analytics platform that tracks how brands appear in LLM res
 contribution: Orchestrated prompts across multiple LLM providers with fallbacks and retries. Built the evaluation pipeline to generate, process and classify LLM responses into the metrics. Implemented a distributed lock pattern using MongoDB's atomic findAndUpdate for reliable background job processing. Designed and shipped multi-tenant blog infrastructure with custom domain support, DNS verification, and GEO-optimized blog sites.
 ---
 
+import Screenshot from "~/components/common/screenshot.astro";
+import dashboardOverview from "~/assets/images/listable-labs/dashboard-overview.png";
+import dashboardVisibility from "~/assets/images/listable-labs/dashboard-visibility.png";
+import dashboardMentions from "~/assets/images/listable-labs/dashboard-mentions.png";
+import dashboardPrompts from "~/assets/images/listable-labs/dashboard-prompts.png";
+import dashboardPromptDetail from "~/assets/images/listable-labs/dashboard-prompt-detail.png";
+import dashboardSuggestions from "~/assets/images/listable-labs/dashboard-suggestions.png";
+import dashboardArticles from "~/assets/images/listable-labs/dashboard-articles.png";
+import dashboardArticleDetail from "~/assets/images/listable-labs/dashboard-article-detail.png";
+import accountIntegrations from "~/assets/images/listable-labs/account-integrations.png";
+
 ## Product Screenshots
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-12">
-  <figure>
-    <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-overview.png" alt="Listable Labs dashboard overview with active projects and article metrics" />
-  </figure>
-  <figure>
-    <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-visibility.png" alt="Listable Labs visibility metrics showing share of voice and average position" />
-  </figure>
-  <figure>
-    <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-mentions.png" alt="Listable Labs mention metrics across LLM providers with position distribution" />
-  </figure>
-  <figure>
-    <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-prompts.png" alt="Listable Labs prompts table showing tracked prompts and their status" />
-  </figure>
+  <Screenshot src={dashboardOverview} alt="Listable Labs dashboard overview with active projects and article metrics" />
+  <Screenshot src={dashboardVisibility} alt="Listable Labs visibility metrics showing share of voice and average position" />
+  <Screenshot src={dashboardMentions} alt="Listable Labs mention metrics across LLM providers with position distribution" />
+  <Screenshot src={dashboardPrompts} alt="Listable Labs prompts table showing tracked prompts and their status" />
 </div>
 
 ## Deep Dive
@@ -39,25 +42,25 @@ contribution: Orchestrated prompts across multiple LLM providers with fallbacks 
 
 How prompts flow from tracking → LLM orchestration → response classification → metrics.
 
-<img class="rounded" data-lightbox src="/images/listable-labs/dashboard-prompt-detail.png" alt="Prompt detail view with response history and metrics" />
+<Screenshot src={dashboardPromptDetail} alt="Prompt detail view with response history and metrics" />
 
 ### Suggestions Engine
 
 The benchmarking catalog: building self and competitor profiles from LLM response logs, classifying source sentiment, and generating deterministic recommendations.
 
-<img class="rounded" data-lightbox src="/images/listable-labs/dashboard-suggestions.png" alt="Suggestions dashboard with actionable recommendations for improving brand visibility" />
+<Screenshot src={dashboardSuggestions} alt="Suggestions dashboard with actionable recommendations for improving brand visibility" />
 
 ### Multi-Tenant Blog Infrastructure
 
 Custom domain support, DNS verification, and GEO-optimized blog sites.
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-  <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-articles.png" alt="Articles table showing published blog content" />
-  <img class="rounded" data-lightbox src="/images/listable-labs/dashboard-article-detail.png" alt="Article editor with rich text and metadata sidebar" />
+  <Screenshot src={dashboardArticles} alt="Articles table showing published blog content" />
+  <Screenshot src={dashboardArticleDetail} alt="Article editor with rich text and metadata sidebar" />
 </div>
 
 ### GSC Integration
 
 End-to-end integration with Google Search Console for automatic article indexing.
 
-<img class="rounded" data-lightbox src="/images/listable-labs/account-integrations.png" alt="Account integrations page showing Google Search Console connection" />
+<Screenshot src={accountIntegrations} alt="Account integrations page showing Google Search Console connection" />

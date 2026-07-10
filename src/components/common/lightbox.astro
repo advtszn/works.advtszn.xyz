@@ -10,29 +10,36 @@ import { X } from "lucide-astro";
 </dialog>
 
 <script>
-  const lightbox = document.getElementById("lightbox") as HTMLDialogElement;
-  const lightboxImg = document.getElementById("lightbox-img") as HTMLImageElement;
-  const closeBtn = document.getElementById("lightbox-close") as HTMLButtonElement;
+  function initLightbox() {
+    const lightbox = document.getElementById("lightbox") as HTMLDialogElement;
+    const lightboxImg = document.getElementById("lightbox-img") as HTMLImageElement;
+    const closeBtn = document.getElementById("lightbox-close") as HTMLButtonElement;
 
-  document.querySelectorAll("[data-lightbox]").forEach((img) => {
-    img.addEventListener("click", () => {
-      const src = (img as HTMLImageElement).src;
-      const alt = (img as HTMLImageElement).alt;
-      lightboxImg.src = src;
-      lightboxImg.alt = alt;
-      lightbox.showModal();
+    if (!lightbox || !lightboxImg || !closeBtn) return;
+
+    document.querySelectorAll("[data-lightbox]").forEach((img) => {
+      img.addEventListener("click", () => {
+        const src = (img as HTMLImageElement).src;
+        const alt = (img as HTMLImageElement).alt;
+        lightboxImg.src = src;
+        lightboxImg.alt = alt;
+        lightbox.showModal();
+      });
     });
-  });
 
-  closeBtn.addEventListener("click", () => lightbox.close());
+    closeBtn.addEventListener("click", () => lightbox.close());
 
-  lightbox.addEventListener("click", (e) => {
-    if (e.target === lightbox) lightbox.close();
-  });
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) lightbox.close();
+    });
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && lightbox.open) lightbox.close();
-  });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && lightbox.open) lightbox.close();
+    });
+  }
+
+  initLightbox();
+  document.addEventListener("astro:after-swap", initLightbox);
 </script>
 
 <style>
