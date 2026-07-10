@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Container from "~/components/common/container.astro";
+import { Image } from "astro:assets";
 
 const works = (await getCollection("work")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -24,10 +25,13 @@ const works = (await getCollection("work")).sort(
             works.map((work) => (
               <a href={`/${work.id}`} class="space-y-4 group">
                 <div class="aspect-video rounded group">
-                  <img
+                  <Image
                     src={work.data.thumbnail}
+                    width={1024}
+                    height={576}
                     class="h-full w-full object-cover rounded grayscale group-hover:grayscale-0 transition-all duration-500"
                     alt={work.data.title}
+                    loading="eager"
                   />
                 </div>
                 <div class="space-y-1">
