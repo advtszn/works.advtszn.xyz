@@ -16,14 +16,15 @@ contribution: Designed and developed a responsive marketing website with Sanity 
 import Screenshot from "~/components/common/screenshot.astro";
 import thumbnail from "~/assets/images/oilstream-solutions/thumbnail.png";
 import desktopFeatures from "~/assets/images/oilstream-solutions/desktop-features.png";
-import phoneHero from "~/assets/images/oilstream-solutions/phone-hero.png";
 import phoneFaq from "~/assets/images/oilstream-solutions/phone-faq.png";
 
-## PRODUCT SCREENSHOTS
+## Visuals
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-12">
   <Screenshot src={thumbnail} alt="Oilstream Solutions hero section on iPad" />
   <Screenshot src={desktopFeatures} alt="Oilstream Solutions features section on desktop" />
-  <Screenshot src={phoneHero} alt="Oilstream Solutions hero section on mobile" />
+  <figure>
+    <video class="rounded" src="/videos/oilstream-solutions/faq-accordion.mp4" autoplay loop muted playsinline />
+  </figure>
   <Screenshot src={phoneFaq} alt="Oilstream Solutions FAQ section on mobile" />
 </div>

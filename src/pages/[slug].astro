@@ -29,7 +29,8 @@ const formatDate = (date: Date): string => {
         <a href="/" class="text-muted-foreground flex text-sm items-center pt-2">
           <ArrowLeft size={16} className="mr-1.5" /> Back to works
         </a>
-        <h1 class="uppercase text-3xl font-serif font-medium pb-6">{work.data.title}</h1>
+        <div class="flex items-center justify-between mb-12"><h1 class="uppercase text-3xl font-serif font-medium ">{work.data.title}</h1>
+        <p class="font-medium text-sm text-muted-foreground">{formatDate(work.data.date)}</p></div>
 
         <div class="flex flex-col gap-12 md:flex-row items-start justify-between">
           <div class="md:w-1/2">

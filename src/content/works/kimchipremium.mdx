@@ -1,0 +1,91 @@
+---
+title: KIMCHI PREMIUM
+category: internship
+role: development
+tech:
+  - typescript
+  - python
+  - hono
+  - bullmq
+  - astro
+  - sanity
+date: 2025-05-09
+url: https://kimchipremium.io
+thumbnail: /images/kimchipremium/thumbnail.png
+timeline: 3 months
+overview: Crypto news is dominated by English-language sources, leaving Korean traders relying on delayed or secondhand translations. Kimchi Premium is a bilingual crypto news aggregator that delivers real-time alpha to Korean crypto communities by scraping, summarizing, and translating headlines from major English-language sources into Korean.
+contribution: Built the end-to-end ETL pipeline, webhook backend, job processing system, and bilingual distribution layer across Telegram and the public website.
+---
+
+import Screenshot from "~/components/common/screenshot.astro";
+import desktopHero from "~/assets/images/kimchipremium/desktop-hero.png";
+import ipadArticles from "~/assets/images/kimchipremium/ipad-articles.png";
+import iphoneNews from "~/assets/images/kimchipremium/iphone-news.png";
+import iphoneAppIcon from "~/assets/images/kimchipremium/iphone-app-icon.png";
+import pipelineDiagram from "~/assets/images/kimchipremium/pipeline-diagram.png";
+
+
+
+## Deep Dive
+
+<Screenshot src={pipelineDiagram} alt="Kimchi Premium ETL pipeline architecture showing ingestion, processing, and delivery stages" />
+
+
+
+### How It Works
+
+Most crypto alpha originates from English-language sources like Twitter threads, blog posts, protocol announcements, and news desks. By the time any of that reaches Korean trading communities, it's already been through a game of telephone: someone screenshots a tweet, someone else paraphrases it in a group chat, and by the time it lands in a Telegram channel the nuance is gone and the trade is over.
+
+Kimchi Premium closes that gap. Every 15 minutes, the system scrapes headlines from ~5 major crypto news sources, generates a concise summary of each article, translates both the headline and summary into Korean, and pushes the result out to a Telegram channel and a public website, all without human intervention.
+
+The end-to-end latency from an article being published to it appearing translated in the Telegram channel is under a few minutes. Fast enough that Korean traders are reading the same news as English-speaking traders, not a translated digest hours later.
+
+### The Scraper
+
+A Python ETL script runs on a cron schedule via GitHub Actions. It pulls headlines from multiple sources, normalizes them into a common format, and deduplicates against previously seen entries to avoid reprocessing. The deduplicated batch is then forwarded as a single payload to a webhook endpoint.
+
+GitHub Actions was a deliberate choice over a self-hosted cron. No server to maintain, no uptime to worry about, and the 15-minute interval fits comfortably within free-tier limits.
+
+### Job Processing
+
+The webhook endpoint is a Hono server that receives the batched headlines and fans them out, dispatching one BullMQ job per headline. Each job hits Gemini API to generate a summary of the original article, then runs a second pass to translate both the headline and summary into Korean.
+
+BullMQ handles retry logic and concurrency control. If an LLM call fails or rate-limits, the job gets retried automatically rather than dropping the headline silently. This matters when you're processing dozens of headlines every 15 minutes, and one flaky API response shouldn't mean a missed story.
+
+### Distribution
+
+The processed content is then pushed to telegram channel (korean only) and sanity cms (both english and korean).
+
+The Telegram channel is the real-time alpha channel, optimized for speed. Traders get a notification, scan the headline, and decide whether to act. The public website is built with Astro and pulls content from Sanity CMS. It serves both English and Korean versions of every page and doubles as an SEO play. Telegram handles the real-time push while the website invites organic traffic.
+
+
+## How I'd Scale This
+
+On a good day the pipeline would process 50 to 75 headlines, but as more sources get added the bottlenecks become obvious.
+
+### Replacing Sanity CMS
+
+The first thing that breaks is Sanity. At higher volumes, Sanity's API rate limits start throttling write throughput, and the storage costs add up fast. Sanity stores version history, draft states, and other CMS metadata alongside your actual content, so the storage footprint balloons well beyond the raw article data. For a system that's generating dozens of documents every 15 minutes with no need for collaborative editing workflows, that overhead isn't worth paying for.
+
+The move would be to swap Sanity for MongoDB. A document store gives the same schema flexibility without the CMS baggage, and writes scale linearly without hitting API rate limits. For the cases where an author needs to manually edit a translated headline or fix a summary, a lightweight content management UI could be built on top. Nothing fancy, just enough to browse, search, and edit articles. That replaces the one part of Sanity that was actually useful without inheriting everything that wasn't.
+
+### Surviving Source Blocks
+
+The second scaling problem is the scrapers themselves getting blocked. Right now the scraper runs as a simple Python script making direct HTTP requests. That works when you're hitting a handful of sources, but as the list grows, rate limiting and IP blocking become inevitable.
+
+The first line of defense is rotating proxies to distribute requests across different IPs. If a source starts serving CAPTCHAs or JavaScript challenges, the fallback would be non-headless browser automation to mimic real user behavior. That's the worst case scenario and comes with its own cost and complexity, so it only makes sense for sources that are high-value enough to justify the overhead.
+
+### Smarter Deduplication
+
+Right now deduplication works by matching against previously seen headlines. That's fine when each source covers different stories, but as more sources get added they inevitably cover the same news. Two outlets reporting on the same SEC ruling will have completely different headlines, and the current system would treat them as two separate stories. At scale, that means the Telegram channel and website get flooded with near-duplicate content. The fix would be fuzzy matching, comparing incoming headlines against recent entries using semantic similarity rather than exact string matching, so the system can recognize that two differently worded headlines are about the same event and merge them instead of publishing both.
+
+
+## Visuals
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-12">
+  <Screenshot src={desktopHero} alt="Kimchi Premium homepage on desktop showing featured article and navigation" />
+  <Screenshot src={ipadArticles} alt="Kimchi Premium articles grid on iPad with crypto news thumbnails" />
+  <Screenshot src={iphoneNews} alt="Kimchi Premium live news feed on iPhone showing translated headlines" />
+  <Screenshot src={iphoneAppIcon} alt="Kimchi Premium app icon mockup on iPhone" />
+</div>
+
