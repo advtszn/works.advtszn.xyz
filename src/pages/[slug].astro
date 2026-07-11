@@ -155,8 +155,35 @@ const formatDate = (date: Date): string => {
     font-size: 16px;
   }
 
+  .mdx :global(ul),
+  .mdx :global(ol) {
+    font-family: var(--font-sans);
+    color: var(--color-muted-foreground);
+    font-weight: 500;
+    line-height: 150%;
+    font-size: 16px;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mdx :global(ul) {
+    list-style-type: disc;
+  }
+
+  .mdx :global(ol) {
+    list-style-type: decimal;
+  }
+
+  .mdx :global(li) :global(p) {
+    display: inline;
+  }
+
   @media (min-width: 768px) {
-    .mdx :global(p) {
+    .mdx :global(p),
+    .mdx :global(ul),
+    .mdx :global(ol) {
       font-size: 18px;
     }
   }

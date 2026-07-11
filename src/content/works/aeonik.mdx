@@ -1,0 +1,46 @@
+---
+title: aeonik
+category: take-home
+role: fullstack
+tech:
+  - typescript
+  - nextjs
+  - ai-sdk
+  - pgvector
+url: https://aeonik.vercel.app
+date: 2025-08-31
+thumbnail: /images/aeonik/thumbnail.png
+timeline: 5 days
+overview: Aeonik is a chatbot for your LinkedIn network. Upload your connections export and ask for people in plain language, like "who do I know that works on AI infra?"
+contribution: Built as the take-home assignment for my interview at gitroll.io. The CSV onboarding flow, a background enrichment pipeline that scrapes and summarizes each connection's profile, and a personalized semantic search served through a chat interface.
+---
+
+## Deep Dive
+
+### How It Started
+
+This was the take-home assignment for my interview at [gitroll.io](https://gitroll.io). The brief was framed as a user story about activating weak ties: you're a business person with a large LinkedIn network, but most of it is people you've never really talked to. When a specific mission comes up (the brief's example was "I'm expanding my logistics business into Brazil and looking for reliable partners"), you have no way to figure out who in your network is actually worth reaching out to. The assignment: build an AI chatbot that parses your LinkedIn connections, understands the mission, and suggests the right weak ties to re-activate, with reasons.
+
+LinkedIn's connections export only gives you a name, company, position, and a URL per person, which is nothing you could meaningfully search over. So the interesting work is turning those four columns into something an LLM can actually reason about.
+
+### The Enrichment Pipeline
+
+Onboarding starts with the raw `Connections.csv` export. Each connection then gets enriched in the background through an Inngest job: a LinkedIn scraper (via RapidAPI) pulls the full profile, with headline, education, positions, languages, and location, and GPT-4.1 condenses it into a 3-5 sentence professional summary. That summary is embedded with `text-embedding-3-small` and stored in Postgres with pgvector, under an HNSW index for cosine search. Running it through Inngest means a few hundred connections can enrich asynchronously without the onboarding flow blocking on scrape-and-summarize round trips.
+
+The user goes through the same treatment: their own profile is scraped and summarized once at onboarding, which turns out to matter for retrieval.
+
+### Personalized Retrieval
+
+The chat is a Next.js app on the Vercel AI SDK, with GPT-4.1 calling a `search-connections` tool. The search doesn't just match the query against connection embeddings; it embeds two things: the query and the user's own profile summary. Each connection gets scored against both, and the final ranking blends them: 60% query similarity, 40% user similarity. Two people asking the same question get different results, biased toward the parts of their network closest to their own background.
+
+The top matches then get one more LLM pass that writes a short "why this person" explanation, grounded in the query, the user's profile, and the connection's summary, so results come back as people with reasons, not just names with scores.
+
+### The Verdict
+
+I didn't get the job. The summary: "your backend is way more solid than your frontend, but I don't need a junior backend right now." What made the interview worth it was the review of the submission itself. Three things got flagged:
+
+- **One dense embedding per connection.** I squeezed every searchable factor (role, company, location, background) into a single embedding, which muddies each signal. This is exactly where multi-facet embeddings shine, and it's the lesson I applied directly in [creator daddy](/creator-daddy) a few months later, with separate embeddings per facet.
+- **Relevance as an afterthought.** The "why this person matches" reason was generated *after* retrieval, as commentary on whatever the vector search returned. The better design orchestrates retrieval *around* the relevance factors instead of explaining the results post-hoc.
+- **Unsecured background jobs.** The Inngest trigger endpoint wasn't protected by auth.
+
+The CTO followed up with broader advice too: my `upload-area.tsx` had UI and logic tangled together, and his larger point was that its important to understand what the tools are doing under the hood (how React actually renders, what Inngest is doing behind its API) so that AI can't "ruin your code base secretly" while you're not looking.
