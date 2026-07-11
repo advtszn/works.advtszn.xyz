@@ -29,7 +29,7 @@ const works = (await getCollection("work")).sort(
                     src={work.data.thumbnail}
                     width={1024}
                     height={576}
-                    class="h-full w-full object-cover rounded grayscale group-hover:grayscale-0 transition-all duration-500"
+                    class="h-full w-full object-cover rounded pointer-fine:grayscale pointer-fine:group-hover:grayscale-0 transition-all duration-500"
                     alt={work.data.title}
                     loading="eager"
                   />
