@@ -8,13 +8,13 @@ import { ArrowLeft, ArrowRight } from "lucide-astro";
 export const getStaticPaths = (async () => {
   const works = await getCollection("work");
   works.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-  return works.map((work, i) => ({
+  return works.map((work) => ({
     params: { slug: work.id },
-    props: { work, next: works[i + 1] ?? null },
+    props: { work },
   }));
 }) satisfies GetStaticPaths;
 
-const { work, next } = Astro.props;
+const { work } = Astro.props;
 const { Content } = await render(work);
 
 const formatDate = (date: Date): string => {
@@ -101,7 +101,7 @@ const formatDate = (date: Date): string => {
     </Container>
 
     <Container>
-      <article class="mdx space-y-6">
+      <article class="mdx space-y-6 mb-20">
         <Content />
       </article>
     </Container>
