@@ -29,7 +29,11 @@ const formatDate = (date: Date): string => {
 };
 ---
 
-<Layout>
+<Layout
+  title={`${work.data.title} | advtszn`}
+  description={work.data.overview}
+  image={work.data.thumbnail}
+>
   <main>
     <Container>
       <div class="space-y-6">
