@@ -27,5 +27,14 @@ import Lightbox from "~/components/common/lightbox.astro";
     <div class="fixed bottom-4 right-4 z-50 bg-foreground text-background text-xs font-medium px-3 py-1.5 rounded-full select-none pointer-events-none">
       WIP
     </div>
+    <script>
+      // Browsers don't honor the autoplay attribute on videos swapped in by
+      // the ClientRouter, so kick them off manually after each navigation.
+      document.addEventListener("astro:page-load", () => {
+        document.querySelectorAll<HTMLVideoElement>("video[autoplay]").forEach((video) => {
+          video.play().catch(() => {});
+        });
+      });
+    </script>
   </body>
 </html>
