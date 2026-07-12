@@ -3,18 +3,24 @@ import { getCollection, render } from "astro:content";
 import type { GetStaticPaths } from "astro";
 import Layout from "../layouts/Layout.astro";
 import Container from "~/components/common/container.astro";
-import { ArrowLeft, ArrowRight } from "lucide-astro";
+import { Image } from "astro:assets";
+import { ArrowLeft } from "lucide-astro";
 
 export const getStaticPaths = (async () => {
   const works = await getCollection("work");
   works.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-  return works.map((work) => ({
+  return works.map((work, i) => ({
     params: { slug: work.id },
-    props: { work },
+    props: {
+      work,
+      others: [1, 2, 3]
+        .map((offset) => works[(i + offset) % works.length])
+        .filter((other) => other.id !== work.id),
+    },
   }));
 }) satisfies GetStaticPaths;
 
-const { work } = Astro.props;
+const { work, others } = Astro.props;
 const { Content } = await render(work);
 
 const formatDate = (date: Date): string => {
@@ -104,6 +110,39 @@ const formatDate = (date: Date): string => {
       <article class="mdx space-y-6 mb-20">
         <Content />
       </article>
+      {
+        others.length > 0 && (
+          <div class="mb-20 py-10 border-t space-y-6">
+            <h2 class="font-serif uppercase text-2xl font-medium">
+              More works
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-4">
+              {others.map((other) => (
+                <a href={`/${other.id}`} class="space-y-4 group">
+                  <div class="aspect-video rounded group">
+                    <Image
+                      src={other.data.thumbnail}
+                      width={1024}
+                      height={576}
+                      class="h-full w-full object-cover rounded pointer-fine:grayscale pointer-fine:group-hover:grayscale-0 transition-all duration-500"
+                      alt={other.data.title}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div class="space-y-0.5">
+                    <h3 class="font-serif uppercase text-lg font-medium">
+                      {other.data.title}
+                    </h3>
+                    <p class="text-muted-foreground font-medium text-sm">
+                      {other.data.category} • {other.data.role}
+                    </p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
     </Container>
   </main>
 </Layout>

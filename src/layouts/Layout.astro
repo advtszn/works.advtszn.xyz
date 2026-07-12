@@ -28,11 +28,15 @@ import Lightbox from "~/components/common/lightbox.astro";
       WIP
     </div>
     <script>
-      // Browsers don't honor the autoplay attribute on videos swapped in by
-      // the ClientRouter, so kick them off manually after each navigation.
+      // Videos swapped in by the ClientRouter are parsed in an inert document
+      // where source selection fails, so they arrive in an errored state.
+      // load() resets the element and re-fetches; then autoplay needs a manual kick.
       document.addEventListener("astro:page-load", () => {
-        document.querySelectorAll<HTMLVideoElement>("video[autoplay]").forEach((video) => {
-          video.play().catch(() => {});
+        document.querySelectorAll<HTMLVideoElement>("video").forEach((video) => {
+          if (video.error || video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) {
+            video.load();
+          }
+          if (video.autoplay) video.play().catch(() => {});
         });
       });
     </script>

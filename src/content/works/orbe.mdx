@@ -34,7 +34,7 @@ import enrichmentPipeline from "~/assets/images/orbe/enrichment-pipeline.png";
 
 ### There Are Levels to This
 
-Based on freelancing subreddits I found out that High-ticket, experienced freelancers get most of their clients through referrals. Beginners aren't trying to scale at all; they're building retention with the few clients they have. The tension lives in the middle: the mid-stage freelancer whose retention is finally strong and who now needs to scale their client base.
+High-ticket, experienced freelancers get most of their clients through referrals, at least according to every freelancing subreddit I lurked in. Beginners aren't trying to scale at all; they're building retention with the few clients they have. The tension lives in the middle: the mid-stage freelancer whose retention is finally strong and who now needs to scale their client base.
 
 A corporation, or even a small agency, solves this with a dedicated sales person who runs the outreach (inbound and outbound) and closes deals. A solo operator doesn't have that luxury. They context-switch between their actual craft and acquiring clients, and both suffer for it.
 
@@ -48,11 +48,10 @@ The philosophy behind it is old sales wisdom: observe your client, stalk them. T
 
 Setup is built to get you from zero to outreach-ready with one input: your website. Orbe analyzes it to create your first offering, then mines it again for the DOs and DON'Ts of your voice, so every email it writes sounds like you and not like a model. Add your timezone and meeting link and the workspace is live.
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-2 my-12 place-items-center">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-2 my-12 place-items-center">
   <Screenshot src={onboardingWebsite} alt="Workspace onboarding: enter your website to generate your first offering" />
   <Screenshot src={onboardingVoice} alt="Workspace onboarding: voice DOs and DON'Ts extracted from your website" />
   <Screenshot src={onboardingContact} alt="Workspace onboarding: timezone and meeting link" />
-  <Screenshot src={workspaces} alt="Workspaces list" />
 </div>
 
 ### Offerings
@@ -76,10 +75,9 @@ Every step is individually fallible. A failed scrape logs and moves on, partial 
 
 
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-2 my-12 place-items-center">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-2 my-12 place-items-center">
   <Screenshot src={leads} alt="Leads list with enrichment status" />
   <Screenshot src={leadDetail} alt="Enriched lead detail: business profile, ICP, and work description" />
-  <Screenshot src={enrichmentPipeline} alt="Flowchart of the lead enrichment pipeline: LinkedIn profile and company scraping, business website analysis with retries and fallbacks, work analysis, and the final analyzed or failed status" />
 </div>
 
 The LinkedIn scraping runs on free-tier APIs from rapidapi, pooled behind a Redis-backed key manager I engineered for this: keys rotate least-recently-used, and any key that hits a rate limit gets benched in a cooldown set until its retry-after expires. I never hit a usage limit at any point in development.
@@ -108,7 +106,7 @@ This was my final year capstone project, so parts of it were rushed, and I'll ow
 
 ### There's more to this
 
-The thing I hardly researched during this build is also the thing that's never finished: making the AI drafts as human as possible. Extracting voice DOs and DON'Ts from the user's website was the first step, but injecting that into the system prompt was just a low effort damage control, im sure there's a deep rabbit hole between "an email written by AI" and "an email a real person would send," and closing that gap is the core of the product.
+The thing I hardly researched during this build was making the AI drafts as human as possible. Extracting voice DOs and DON'Ts from the user's website was the first step, but just injecting that into the system prompt was just a low effort personalization, im sure there's a deep rabbit hole between "an email written by AI" and "an email a real person would send," and closing that gap is the core of the product.
 
 Campaigns were rushed too, and honestly the whole concept is a placeholder, corporate sales lingo like this was never supposed to make it into the system. What was supposed to replace it is playbooks. A playbook is just an outreach sequence: set up your email templates, or don't (let AI write it for you), then build the workflow you already run in your head. Start, send the outbound email, wait a few days, follow up, wait again, mark as ghosted. That's what most freelancers would actually want, and probably already do manually. Not a CRM, just their own playbook executed in a no-BS but automated manner for the leads they care about.
 

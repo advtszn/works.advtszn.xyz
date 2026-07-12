@@ -1,6 +1,6 @@
 ---
 title: aeonik
-category: take-home
+category: assignment
 role: fullstack
 tech:
   - typescript
@@ -37,7 +37,7 @@ The top matches then get one more LLM pass that writes a short "why this person"
 
 ### The Verdict
 
-I didn't get the job. The summary: "your backend is way more solid than your frontend, but I don't need a junior backend right now." What made the interview worth it was the review of the submission itself. Three things got flagged:
+I didn't get the job but the review of the assignment in interview was really helpful. Below are the three major things that got flagged:
 
 - **One dense embedding per connection.** I squeezed every searchable factor (role, company, location, background) into a single embedding, which muddies each signal. This is exactly where multi-facet embeddings shine, and it's the lesson I applied directly in [creator daddy](/creator-daddy) a few months later, with separate embeddings per facet.
 - **Relevance as an afterthought.** The "why this person matches" reason was generated *after* retrieval, as commentary on whatever the vector search returned. The better design orchestrates retrieval *around* the relevance factors instead of explaining the results post-hoc.
