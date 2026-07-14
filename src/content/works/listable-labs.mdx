@@ -26,35 +26,62 @@ import dashboardSuggestions from "~/assets/images/listable-labs/dashboard-sugges
 import dashboardArticles from "~/assets/images/listable-labs/dashboard-articles.png";
 import dashboardArticleDetail from "~/assets/images/listable-labs/dashboard-article-detail.png";
 import accountIntegrations from "~/assets/images/listable-labs/account-integrations.png";
+import multiTenantArchitecture from "~/assets/images/listable-labs/multi-tenant-architecture.png";
 
 
 
 ## Deep Dive
 
-### The Evaluation Pipeline
+Listable answers one question for brands: when someone asks ChatGPT, Gemini or Perplexity "what's the best X", do you show up? Every tracked prompt gets evaluated on a schedule across all three, the responses get classified into mentions, positions and share of voice, and the gaps between you and whoever outranked you get turned into concrete recommendations.
 
-How prompts flow from tracking → LLM orchestration → response classification → metrics.
+### Four Iterations of the Evaluation Pipeline
+
+The classification problem sounds simple (given an LLM response, figure out which brands are mentioned and where) and we got it wrong three times.
+
+The first version was a two-pass LLM setup: one call generates the response, a second call evaluates and classifies it. It worked, but using an LLM to read another LLM's output felt like overkill, so we replaced it with something deterministic. (We were wrong about the overkill part, but that took a while to surface.)
+
+The deterministic version was a small markdown AST parser I wrote: walk the response, find any ordered or unordered list, check if the brand appears in it, and treat every other brand in the same list as a competitor. It was fast and free, and it was way off. Brands don't appear in responses under one canonical name; if wldd showed up as "wubba lubba dub dub" the parser counted it as no mention at all. Aliases, abbreviations and stylized names made the whole thing miss constantly.
+
+So we went back to the two-pass LLM approach, which got expensive quickly and had a maintenance problem: every new model meant updating the parsing config. But the bigger issue was fidelity. An API call to `gpt-4o-mini` is not what a user sees in ChatGPT; the consumer apps are loaded with tools, search and tuning that the raw APIs don't have. The motto became "be as close to the real user environment as possible", which the API path could never deliver.
+
+The version that shipped scrapes the actual apps. Each evaluation fans out to three pipelines in parallel (ChatGPT, Perplexity, and Google's AI Mode), triggered through a browser webscraping service with the user's country attached, so the response is what a real user in that geography would see, citations included. The scraped answer then gets passed to an LLM, which classifies the mentions, positions and cited sources into the metrics.
 
 <Screenshot src={dashboardPromptDetail} alt="Prompt detail view with response history and metrics" />
 
-### Suggestions Engine
+### Background Jobs Without a Queue
 
-The benchmarking catalog: building self and competitor profiles from LLM response logs, classifying source sentiment, and generating deterministic recommendations.
+All of this runs on background workers, and the obvious move was BullMQ or an equivalent. We skipped it because every queue library means another piece of infrastructure to run (Redis, in BullMQ's case) and MongoDB was already there.
+
+Instead the prompts collection is the queue. Each worker lane runs a loop that claims work with a single atomic `findOneAndUpdate`: find a prompt that's active, due for evaluation, and either unlocked or holding a lock older than the timeout, then set its lock timestamp in the same operation. Atomicity of the update is the mutual exclusion; two workers can race for the same prompt but Mongo guarantees only one wins. A sort on priority and last-run time gives fair scheduling, a reaper marks runs that exceeded the lock timeout so crashed workers can't strand a prompt forever, and every run is audited into a jobs collection with a ULID run id, status log and the worker's pid and hostname. The same claim-with-a-lock pattern got reused for DNS verification and article generation workers.
+
+### The Suggestions Engine
+
+Recommendations are easy to fake with a single "give this brand some AEO tips" prompt, and that's exactly what we didn't want. Suggestions had to be traceable to evidence.
+
+After each evaluation, the engine builds a benchmarking catalog from the prompt's response logs: a self profile, and a profile for every competitor that outranked you (or got mentioned when you didn't). For each profile it collects the actual cited sources where that brand was found, fetches every page, and classifies it with a structured LLM call: sentiment toward the brand plus up to five normalized reasons why the brand is mentioned there. Those profiles, serialized in TOON to keep token counts down, go through one final structured pass that produces at most five recommendations, each one required by schema to carry between one and eight of the real cited sources as justification.
+
+So a suggestion is never "write more content"; it's "this comparison page ranks your competitor for this prompt, with this sentiment, for these reasons, here's the link". If the winning source is a blog post, the suggestion carries a ready article prompt, which feeds directly into the article generation pipeline. On every evaluation the previous unresolved suggestions are archived and regenerated in a transaction, so the list always reflects the latest responses.
 
 <Screenshot src={dashboardSuggestions} alt="Suggestions dashboard with actionable recommendations for improving brand visibility" />
 
-### Multi-Tenant Blog Infrastructure
+### Multi-Tenant Blogs on One VM
 
-Custom domain support, DNS verification, and GEO-optimized blog sites.
+The other half of the product acts on those suggestions: every project gets a hosted, GEO-optimized blog on its own subdomain, so publishing content that LLMs will actually cite doesn't require touching your main site. One blog frontend serves every tenant; a middleware reads the Host header, resolves it to a project, and renders that project's articles. The whole flow was sketched in a [design doc](https://app.notion.com/p/advtx/multi-tenant-articles-listable-30badbc913ad80f3bb54fb849379daeb) before the build.
+
+<Screenshot src={multiTenantArchitecture} alt="Blog multi-tenancy sequence diagram: dashboard connects a domain, backend stores the CNAME record, a job polls for propagation, and the blog frontend resolves tenants from the Host header" />
+
+Connecting a domain is a single CNAME to the blog frontend. A background worker (same MongoDB lock pattern as the evaluation job) verifies propagation by sending a HEAD request to the domain's `/challenge` endpoint and checking that the `x-listable-challenge` header echoes back the project's id; since only our frontend sets that header with that value, a matching response proves the CNAME points at us. Domains get periodically revalidated the same way, because DNS records drift after setup. SSL is Caddy's on-demand TLS on the VM, which issues a cert the first time a verified hostname gets a request, so there's no cert provisioning step in our code at all.
+
+Two things got deliberately cut from the design doc. Apex domains are rejected at validation (subdomains only), because supporting them means handing customers the VM's IP address for an A record, and that IP was going to change. And TXT-record ownership verification was dropped entirely; instead, connecting a domain that's already attached to another project is simply rejected. That closes the realistic hijack case without building a whole nonce-generation and DNS-polling flow for an attack that mostly isn't there.
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
   <Screenshot src={dashboardArticles} alt="Articles table showing published blog content" />
   <Screenshot src={dashboardArticleDetail} alt="Article editor with rich text and metadata sidebar" />
 </div>
 
-### GSC Integration
+### Closing the Loop with Google Search Console
 
-End-to-end integration with Google Search Console for automatic article indexing.
+Published articles are only useful if they get indexed, so the last piece connects each project to Google Search Console. The OAuth tokens are stored per project with automatic refresh, and the integration handles both GSC property styles (domain properties and URL-prefix properties) when matching the connected blog domain against the user's Search Console account. On publish, the blog's sitemap gets submitted against the matched property, so new articles enter Google's crawl queue without anyone opening Search Console.
 
 <Screenshot src={accountIntegrations} alt="Account integrations page showing Google Search Console connection" />
 
