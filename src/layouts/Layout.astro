@@ -47,9 +47,6 @@ const imageUrl = new URL(image, Astro.site);
     <slot />
     <Footer />
     <Lightbox />
-    <div class="fixed bottom-4 right-4 z-50 bg-foreground text-background text-xs font-medium px-3 py-1.5 rounded-full select-none pointer-events-none">
-      WIP
-    </div>
     <script>
       // Videos swapped in by the ClientRouter are parsed in an inert document
       // where source selection fails, so they arrive in an errored state.
