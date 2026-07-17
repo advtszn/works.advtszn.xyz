@@ -51,7 +51,7 @@ The deeper problem was that structure isn't semantics, and ranking exposed it. B
 
 So we went back to the two-pass LLM approach, which got expensive quickly and had a maintenance problem: every new model meant updating the registry but the bigger issue was that an API call to `gpt-4o-mini` is not what a user sees in ChatGPT; the consumer apps are loaded with tools, search and tuning that the raw APIs don't have.
 
-The version that was finalized scrapes the actual apps. Each evaluation fans out to three pipelines in parallel (ChatGPT, Perplexity, and Google's AI Mode), triggered through a browser webscraping service, so the response is what a real user would see. The scraped answer then gets passed to an LLM, which classifies the mentions, positions and cited sources into the metrics.
+The version that was finalized scrapes the actual consumer apps. Each evaluation fans out to three pipelines in parallel (ChatGPT, Perplexity, and Google's AI Mode), triggered through a browser webscraping service, so the response is what a real user would see. The scraped answer then gets passed to an LLM, which classifies the mentions, positions and cited sources into the metrics.
 
 ### Background Jobs Without a Queue
 

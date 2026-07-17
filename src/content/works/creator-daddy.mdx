@@ -29,11 +29,10 @@ import pipelineLifecycle from "~/assets/images/creator-daddy/pipeline-lifecycle.
 
 This started as a product brief from the CTO at wldd, who showed me designs for an internal chatbot and asked me to figure out one thing: how do you generate embeddings for creators and their content? The first 2-3 days went into fiddling with scraping and enrichment, and the chatbot interface and retrieval pipeline came together over the weekend.
 
-The core insight is that a creator isn't one thing. A query like "fitness creators with a comedic style who appeal to Gen Z" is really three separate questions: what do they make (niche), how do they make it (style), and who watches it (audience). Collapsing all of that into a single embedding per creator muddies each signal, so the system keeps them separate. That idea, along with the rest of the architecture, was sketched out in a [design doc](https://app.notion.com/p/advtx/creator-embeddings-2deadbc913ad80e1b41de48e0576ac38) before any code was written.
+The core insight is that a creator isn't one thing. A query like "fitness creators with a comedic style who appeal to Gen Z" is really three separate questions: what do they make (niche), how do they make it (style), and who watches it (audience). Collapsing all of that into a single embedding per creator muddies each signal, so the system keeps them separate.
 
 I'd picked up both the multi-embedding and hybrid retrieval patterns a little earlier, when i interviewed with gitroll.io - [aeonik](/aeonik) was the take-home assignment we dug into during that interview, and those ideas carried straight over into this build.
 
-<Screenshot src={multiEmbeddings} alt="Raw Instagram data (reels, carousels, comments) flowing into multi-parameter embeddings split by niche, audience, and style" />
 
 
 
@@ -46,7 +45,7 @@ I shortlisted 15 creators across different niches and scraped two things for eac
 </div>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-Each creator's reels then get uploaded via the Gemini Files API and fed to `gemini-2.5-flash` in a single pass, which returns a structured JSON profile with three distinct summaries per creator: one describing their niche, one describing their content style, and one describing their target audience. (I also prototyped the video analysis with TwelveLabs' marengo and pegasus models before settling on Gemini — both POCs are public at [creator-embeddings-poc](https://github.com/advtszn/creator-embeddings-poc) and [gemini-video-intelligence](https://github.com/advtszn/gemini-video-intelligence).) Those summaries are embedded with `gemini-embedding-001` and stored in three separate ChromaDB collections, one per facet. Every embedding carries the creator's unique ID as metadata, and the static profile data lives in MongoDB keyed by that same ID. The vector store answers "who matches this vibe," and MongoDB answers "tell me about them."
+Each creator's reels then get uploaded via the Gemini Files API and fed to `gemini-2.5-flash` in a single pass, which returns a structured JSON profile with three distinct summaries per creator: one describing their niche, one describing their content style, and one describing their target audience. (I also prototyped the video analysis with TwelveLabs' marengo and pegasus models before settling on Gemini) Those summaries are embedded with `gemini-embedding-001` and stored in three separate ChromaDB collections, one per facet. Every embedding carries the creator's unique ID as metadata, and the static profile data lives in MongoDB keyed by that same ID. The vector store answers "who matches this vibe," and MongoDB answers "tell me about them."
 
 ### Multi-Facet Retrieval
 

@@ -28,15 +28,20 @@ import pipelineDiagram from "~/assets/images/kimchipremium/pipeline-diagram.png"
 
 ## Deep Dive
 
-<Screenshot src={pipelineDiagram} alt="Kimchi Premium ETL pipeline architecture showing ingestion, processing, and delivery stages" />
+
+Most crypto content on the internet lives in English: Twitter threads, blog posts, protocol announcements, news desks. In a country like South Korea, where English isn't the first language for most, that leaves a whole trading community reading crypto news secondhand.
+
+By the time any of it reaches Korean traders, it's already been through a game of telephone. Someone screenshots a tweet, someone else paraphrases it in a group chat, and by the time it lands in a Telegram channel the nuance is gone. Kimchi Premium closes that gap, not by finding news nobody else has, but by getting the news that already exists to the people who couldn't read it yet.
+
+
 
 
 
 ### How It Works
 
-Most crypto alpha originates from English-language sources like Twitter threads, blog posts, protocol announcements, and news desks. By the time any of that reaches Korean trading communities, it's already been through a game of telephone: someone screenshots a tweet, someone else paraphrases it in a group chat, and by the time it lands in a Telegram channel the nuance is gone and the trade is over.
+<Screenshot src={pipelineDiagram} alt="Kimchi Premium ETL pipeline architecture showing ingestion, processing, and delivery stages" />
 
-Kimchi Premium closes that gap. Every 15 minutes, the system scrapes headlines from ~5 major crypto news sources, generates a concise summary of each article, translates both the headline and summary into Korean, and pushes the result out to a Telegram channel and a public website, all without human intervention.
+The mechanics are simple. Every 15 minutes, the system scrapes headlines from ~5 major crypto news sources, generates a concise summary of each article, translates both the headline and summary into Korean, and pushes the result out to a Telegram channel and a public website, all without human intervention.
 
 The end-to-end latency from an article being published to it appearing translated in the Telegram channel is under a few minutes. Fast enough that Korean traders are reading the same news as English-speaking traders, not a translated digest hours later.
 
@@ -88,4 +93,3 @@ Right now deduplication works by matching against previously seen headlines. Tha
   <Screenshot src={iphoneNews} alt="Kimchi Premium live news feed on iPhone showing translated headlines" />
 
 </div>
-
