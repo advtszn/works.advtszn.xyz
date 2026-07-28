@@ -96,13 +96,13 @@ const formatDate = (date: Date): string => {
                 <h2 class="text-lg font-serif uppercase font-medium">
                   Overview
                 </h2>
-                <p class="text-muted-foreground">{work.data.overview}</p>
+                <p class="text-muted-foreground text-justify">{work.data.overview}</p>
               </div>
               <div class="space-y-1">
                 <h2 class="text-lg font-serif uppercase font-medium">
                   What I Built
                 </h2>
-                <p class="text-muted-foreground">{work.data.contribution}</p>
+                <p class="text-muted-foreground text-justify">{work.data.contribution}</p>
               </div>
             </div>
           </div>
@@ -110,7 +110,7 @@ const formatDate = (date: Date): string => {
       </div>
     </Container>
 
-    <Container>
+    <Container className="py-0">
       <article class="mdx space-y-6 mb-20">
         <Content />
       </article>
@@ -193,9 +193,10 @@ const formatDate = (date: Date): string => {
   .mdx :global(p) {
     font-family: var(--font-sans);
     color: var(--color-muted-foreground);
-    font-weight: 500;
+    font-weight: 400;
     line-height: 150%;
     font-size: 16px;
+    @apply text-justify
   }
 
   .mdx :global(ul),
