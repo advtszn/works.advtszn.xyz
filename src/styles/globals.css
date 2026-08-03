@@ -32,7 +32,7 @@
 
 @theme inline {
   --font-sans: "Instrument Sans Variable", sans-serif;
-  --font-serif: "Satoshi Variable", sans-serif;
+  --font-heading: "Satoshi Variable", sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -178,6 +178,90 @@
 
 [data-lightbox] {
   cursor: zoom-in;
+}
+
+.mdx {
+  @apply space-y-6;
+}
+
+.mdx h1 {
+  @apply text-foreground/90 mt-10 font-heading text-2xl font-medium md:text-3xl;
+}
+
+.mdx h2 {
+  @apply text-foreground/90 mt-10 font-heading text-xl font-medium md:text-2xl;
+}
+
+.mdx h3 {
+  @apply text-foreground/90 mt-10 font-heading text-lg font-medium md:text-xl;
+}
+
+.mdx ul {
+  @apply list-disc space-y-2 pl-6;
+}
+
+.mdx ol {
+  @apply list-decimal space-y-2 pl-6;
+}
+
+.mdx li {
+  @apply text-muted-foreground pl-1 md:text-lg;
+}
+
+.mdx li::marker {
+  @apply text-foreground/50;
+}
+
+.mdx blockquote {
+  @apply text-muted-foreground border-l-2 pl-4 italic;
+}
+
+.mdx a {
+  @apply bg-muted text-muted-foreground font-medium px-1;
+}
+
+/* Images */
+.mdx img {
+  max-width: 90%;
+  max-height: 512px;
+  height: auto;
+  object-fit: contain;
+  @apply mx-auto my-12 cursor-zoom-in rounded-md;
+}
+
+.mdx p {
+  @apply text-muted-foreground text-justify md:text-lg;
+}
+
+/* Tables */
+.mdx table {
+  @apply my-8 w-full border-collapse overflow-x-auto text-sm md:text-base;
+  display: block;
+}
+
+.mdx thead {
+  @apply border-border border-b;
+}
+
+.mdx th {
+  @apply text-foreground/90 font-heading px-3 py-2 text-left font-medium whitespace-nowrap;
+}
+
+.mdx td {
+  @apply text-muted-foreground border-border border-t px-3 py-2 align-top;
+}
+
+.mdx tbody tr:hover {
+  @apply bg-muted/40;
+}
+
+/* Code */
+.mdx pre {
+  @apply my-6 overflow-x-auto rounded-lg p-4 text-sm leading-relaxed md:text-base;
+}
+
+.mdx :not(pre) > code {
+  @apply bg-muted text-foreground/90 rounded px-1.5 py-0.5 text-[0.9em];
 }
 
 @layer base {

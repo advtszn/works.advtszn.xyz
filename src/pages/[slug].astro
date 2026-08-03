@@ -44,7 +44,7 @@ const formatDate = (date: Date): string => {
           <ArrowLeft size={16} className="mr-1.5" /> Back to works
         </a>
         <div class="flex items-center justify-between mb-12">
-          <h1 class="uppercase text-3xl font-serif font-medium">
+          <h1 class="uppercase text-3xl font-heading font-medium">
             {work.data.title}
           </h1>
           <p class="font-medium text-sm text-muted-foreground">
@@ -58,13 +58,13 @@ const formatDate = (date: Date): string => {
           <div class="md:w-1/2">
             <div class="flex gap-6 md:gap-12 flex-col">
               <div class="space-y-1">
-                <h2 class="text-lg font-serif uppercase font-medium">
+                <h2 class="text-lg font-heading uppercase font-medium">
                   Timeline
                 </h2>
                 <p class="text-muted-foreground">{work.data.timeline ?? "—"}</p>
               </div>
               <div class="space-y-1">
-                <h2 class="text-lg font-serif uppercase font-medium">Live</h2>
+                <h2 class="text-lg font-heading uppercase font-medium">Live</h2>
                 <p class="text-muted-foreground">
                   {
                     work.data.url ? (
@@ -84,7 +84,7 @@ const formatDate = (date: Date): string => {
                 </p>
               </div>
               <div class="space-y-1">
-                <h2 class="text-lg font-serif uppercase font-medium">Tech</h2>
+                <h2 class="text-lg font-heading uppercase font-medium">Tech</h2>
                 <p class="text-muted-foreground">{work.data.tech.join(", ")}</p>
               </div>
             </div>
@@ -93,7 +93,7 @@ const formatDate = (date: Date): string => {
           <div class="md:w-1/2">
             <div class="flex gap-6 md:gap-12 flex-col">
               <div class="space-y-1">
-                <h2 class="text-lg font-serif uppercase font-medium">
+                <h2 class="text-lg font-heading uppercase font-medium">
                   Overview
                 </h2>
                 <p class="text-muted-foreground text-justify">
@@ -101,7 +101,7 @@ const formatDate = (date: Date): string => {
                 </p>
               </div>
               <div class="space-y-1">
-                <h2 class="text-lg font-serif uppercase font-medium">
+                <h2 class="text-lg font-heading uppercase font-medium">
                   What I Built
                 </h2>
                 <p class="text-muted-foreground text-justify">
@@ -121,7 +121,7 @@ const formatDate = (date: Date): string => {
       {
         others.length > 0 && (
           <div class="mb-20 py-10 border-t space-y-6">
-            <h2 class="font-serif uppercase text-2xl font-medium">
+            <h2 class="font-heading uppercase text-2xl font-medium">
               More works
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-4">
@@ -138,7 +138,7 @@ const formatDate = (date: Date): string => {
                     />
                   </div>
                   <div class="space-y-0.5">
-                    <h3 class="font-serif uppercase text-lg font-medium">
+                    <h3 class="font-heading uppercase text-lg font-medium">
                       {other.data.title}
                     </h3>
                     <p class="text-muted-foreground font-medium text-sm">
@@ -154,146 +154,3 @@ const formatDate = (date: Date): string => {
     </Container>
   </main>
 </Layout>
-
-<style>
-  .mdx :global(a) {
-    padding: 2px 4px;
-    background-color: var(--color-muted);
-    color: var(--color-muted-foreground);
-    font-weight: 500;
-  }
-
-  .mdx :global(h1),
-  .mdx :global(h2),
-  .mdx :global(h3),
-  .mdx :global(h4),
-  .mdx :global(h5),
-  .mdx :global(h6) {
-    font-family: var(--font-serif);
-    line-height: 1;
-    margin-top: 2.5rem;
-    text-transform: uppercase;
-    font-weight: 500;
-  }
-
-  .mdx :global(h1) {
-    font-size: 1.875rem;
-  }
-  .mdx :global(h2) {
-    font-size: 1.5rem;
-  }
-  .mdx :global(h3) {
-    font-size: 1.25rem;
-  }
-  .mdx :global(h4) {
-    font-size: 1.125rem;
-  }
-  .mdx :global(h5) {
-    font-size: 1rem;
-  }
-  .mdx :global(h6) {
-    font-size: 1rem;
-  }
-
-  .mdx :global(p) {
-    font-family: var(--font-sans);
-    color: var(--color-muted-foreground);
-    font-weight: 400;
-    line-height: 150%;
-    font-size: 16px;
-    @apply text-justify;
-  }
-
-  .mdx :global(ul),
-  .mdx :global(ol) {
-    font-family: var(--font-sans);
-    color: var(--color-muted-foreground);
-    font-weight: 500;
-    line-height: 150%;
-    font-size: 16px;
-    padding-left: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .mdx :global(ul) {
-    list-style-type: disc;
-  }
-
-  .mdx :global(ol) {
-    list-style-type: decimal;
-  }
-
-  .mdx :global(li) :global(p) {
-    display: inline;
-  }
-
-  .mdx :global(li)::marker {
-    color: color-mix(in oklab, var(--color-foreground) 50%, transparent);
-  }
-
-  /* Tables */
-  .mdx :global(table) {
-    display: block;
-    width: 100%;
-    overflow-x: auto;
-    border-collapse: collapse;
-    margin: 2rem 0;
-    font-family: var(--font-sans);
-    font-size: 14px;
-  }
-
-  .mdx :global(thead) {
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .mdx :global(th) {
-    font-family: var(--font-serif);
-    color: var(--color-foreground);
-    text-align: left;
-    font-weight: 500;
-    padding: 0.5rem 0.75rem;
-    white-space: nowrap;
-  }
-
-  .mdx :global(td) {
-    color: var(--color-muted-foreground);
-    border-top: 1px solid var(--color-border);
-    padding: 0.5rem 0.75rem;
-    vertical-align: top;
-  }
-
-  .mdx :global(tbody tr:hover) {
-    background-color: color-mix(in oklab, var(--color-muted) 40%, transparent);
-  }
-
-  /* Code */
-  .mdx :global(pre) {
-    margin: 1.5rem 0;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    overflow-x: auto;
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  .mdx :global(:not(pre) > code) {
-    background-color: var(--color-muted);
-    color: var(--color-foreground);
-    border-radius: 0.25rem;
-    padding: 0.125rem 0.375rem;
-    font-size: 0.9em;
-    font-family: ui-monospace, "SF Mono", Menlo, Monaco, monospace;
-  }
-
-  @media (min-width: 768px) {
-    .mdx :global(p),
-    .mdx :global(ul),
-    .mdx :global(ol),
-    .mdx :global(table),
-    .mdx :global(pre) {
-      font-size: 18px;
-    }
-  }
-</style>
