@@ -185,15 +185,15 @@
 }
 
 .mdx h1 {
-  @apply text-foreground/90 mt-10 font-heading text-2xl font-medium md:text-3xl;
+  @apply text-foreground/90 mt-10 font-heading text-2xl font-medium uppercase md:text-3xl;
 }
 
 .mdx h2 {
-  @apply text-foreground/90 mt-10 font-heading text-xl font-medium md:text-2xl;
+  @apply text-foreground/90 mt-10 font-heading text-xl font-medium uppercase md:text-2xl;
 }
 
 .mdx h3 {
-  @apply text-foreground/90 mt-10 font-heading text-lg font-medium md:text-xl;
+  @apply text-foreground/90 mt-10 font-heading text-lg font-medium uppercase md:text-xl;
 }
 
 .mdx ul {
