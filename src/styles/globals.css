@@ -180,88 +180,145 @@
   cursor: zoom-in;
 }
 
-.mdx {
-  @apply space-y-6;
+.mdx a {
+  padding: 2px 4px;
+  background-color: var(--color-muted);
+  color: var(--color-muted-foreground);
+  font-weight: 500;
+}
+
+.mdx h1,
+.mdx h2,
+.mdx h3,
+.mdx h4,
+.mdx h5,
+.mdx h6 {
+  font-family: var(--font-heading);
+  line-height: 1;
+  margin-top: 2.5rem;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
 .mdx h1 {
-  @apply text-foreground/90 mt-10 font-heading text-2xl font-medium uppercase md:text-3xl;
+  font-size: 1.875rem;
 }
-
 .mdx h2 {
-  @apply text-foreground/90 mt-10 font-heading text-xl font-medium uppercase md:text-2xl;
+  font-size: 1.5rem;
 }
-
 .mdx h3 {
-  @apply text-foreground/90 mt-10 font-heading text-lg font-medium uppercase md:text-xl;
+  font-size: 1.25rem;
 }
-
-.mdx ul {
-  @apply list-disc space-y-2 pl-6;
+.mdx h4 {
+  font-size: 1.125rem;
 }
-
-.mdx ol {
-  @apply list-decimal space-y-2 pl-6;
+.mdx h5 {
+  font-size: 1rem;
 }
-
-.mdx li {
-  @apply text-muted-foreground pl-1 md:text-lg;
-}
-
-.mdx li::marker {
-  @apply text-foreground/50;
-}
-
-.mdx blockquote {
-  @apply text-muted-foreground border-l-2 pl-4 italic;
-}
-
-.mdx a {
-  @apply bg-muted text-muted-foreground font-medium px-1;
-}
-
-/* Images */
-.mdx img {
-  max-width: 90%;
-  max-height: 512px;
-  height: auto;
-  object-fit: contain;
-  @apply mx-auto my-12 cursor-zoom-in rounded-md;
+.mdx h6 {
+  font-size: 1rem;
 }
 
 .mdx p {
-  @apply text-muted-foreground text-justify md:text-lg;
+  font-family: var(--font-sans);
+  color: var(--color-muted-foreground);
+  font-weight: 400;
+  line-height: 150%;
+  font-size: 16px;
+  @apply text-justify;
+}
+
+.mdx ul,
+.mdx ol {
+  font-family: var(--font-sans);
+  color: var(--color-muted-foreground);
+  font-weight: 500;
+  line-height: 150%;
+  font-size: 16px;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mdx ul {
+  list-style-type: disc;
+}
+
+.mdx ol {
+  list-style-type: decimal;
+}
+
+.mdx li p {
+  display: inline;
+}
+
+.mdx li::marker {
+  color: color-mix(in oklab, var(--color-foreground) 50%, transparent);
 }
 
 /* Tables */
 .mdx table {
-  @apply my-8 w-full border-collapse overflow-x-auto text-sm md:text-base;
   display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
 }
 
 .mdx thead {
-  @apply border-border border-b;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .mdx th {
-  @apply text-foreground/90 font-heading px-3 py-2 text-left font-medium whitespace-nowrap;
+  font-family: var(--font-heading);
+  color: var(--color-foreground);
+  text-align: left;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  white-space: nowrap;
 }
 
 .mdx td {
-  @apply text-muted-foreground border-border border-t px-3 py-2 align-top;
+  color: var(--color-muted-foreground);
+  border-top: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
 }
 
 .mdx tbody tr:hover {
-  @apply bg-muted/40;
+  background-color: color-mix(in oklab, var(--color-muted) 40%, transparent);
 }
 
 /* Code */
 .mdx pre {
-  @apply my-6 overflow-x-auto rounded-lg p-4 text-sm leading-relaxed md:text-base;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .mdx :not(pre) > code {
-  @apply bg-muted text-foreground/90 rounded px-1.5 py-0.5 text-[0.9em];
+  background-color: var(--color-muted);
+  color: var(--color-foreground);
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.375rem;
+  font-size: 0.9em;
+  font-family: ui-monospace, "SF Mono", Menlo, Monaco, monospace;
+}
+
+@media (min-width: 768px) {
+  .mdx p,
+  .mdx ul,
+  .mdx ol,
+  .mdx table,
+  .mdx pre {
+    font-size: 18px;
+  }
 }
 
 @layer base {
