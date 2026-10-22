@@ -23,6 +23,7 @@ contribution: >-
 ---
 
 import Screenshot from "~/components/common/screenshot.astro";
+import orchestrator from "~/assets/images/pitchcraft/orchestrator.png";
 import deckCover from "~/assets/images/pitchcraft/deck-cover.png";
 import deckTension from "~/assets/images/pitchcraft/deck-tension.png";
 import deckFormats from "~/assets/images/pitchcraft/deck-formats.png";
@@ -41,11 +42,9 @@ import artifact from "~/assets/images/pitchcraft/artifact.png";
 
 [WLDD](https://wldd.in) hosted an internal company-wide hackathon during the first week of october and i chose the following problem statement: a system that takes a brand and automatically builds a pitch plan we could send to them. Research on the brand, which of our services fit, and why it is relevant, with everything traceable to something real. The output had to read like a plan a brand would receive, not a summary of our own history.
 
-The judging set was three brand names. Jio, Coca-Cola and ChatGPT. Names only, the research was ours. And the scoring split was the part that actually shaped the build: 30% on the output compared against what WLDD really pitched those brands, 70% on methodology. How you built it, why, how you checked it, and how it handles the awkward cases. Methodology outweighed results better than two to one, so the system had to be defensible out loud, not just demoable.
+### The initial idea
 
-### The 1:1 That Killed The Obvious Build
-
-One thing never changed from the first night to the demo: the UX was going to be agent-first, and it was going to borrow heavily from [orbe](/orbe). I had spent enough time on building a design system and a full set of workspace flows, and with two days on the clock I had no intention of designing either from scratch again.
+One thing never changed from the first night to the demo: the UX was going to be agent-first, and it was going to borrow heavily from [orbe](/orbe). I had spent enough time on building a good design system, and with two days on the clock I had no intention of designing either from scratch again.
 
 The brief told the shape of the archive, campaign name, client, services pitched and the client's brief, but not how much of it there would be, so I planned for an archive worth mining.
 
@@ -53,7 +52,7 @@ My approach was to build a markdown knowledge base instead of a vector store. Ev
 
 A production grade RAG setup is real time, real effort and real money, and at the end of it you have chunks. Markdown is almost free, models are already excellent at reading it, and a small amount of engineering on top buys deeplinked citations as a side effect. The trade off is token cost, which is higher, and I took it, because what you get is RAG-like semantics without having actually built a RAG.
 
-During the pre-build 1:1 with Jayant and Aryan when i shared my approach i was told that the archive is only 15 pitches, not the archive I had designed against, which is not enough rows to "knowledge" from however carefully you enrich them. And the 1:1 closed the path deliberately rather than by accident.
+During the pre-build 1:1 with Jayant and Aryan when i shared my approach i was told that the archive is only 15 pitches, not the archive I had designed against, which is not enough rows to build "knowledge" from however carefully you enrich them. And the 1:1 closed the path deliberately rather than by accident.
 
 The 15 pitches then more or less existed to derive how pitch kits are actually written, the pattern, not to serve as runtime source material. The product has to be independent of how much history exists, because it has to work for one-timers and first-timers, brands with no usable past reference. That is the normal case, not the edge case. The moat then came down to the research loop. how context-aware the research is? if diwali is coming up will it suggest a campaign designed around that festival aligned with the brand's rep?
 
@@ -62,56 +61,8 @@ The 15 pitches then more or less existed to derive how pitch kits are actually w
 
 I built a multi-agent system on the [orchestrator-worker](https://ai-sdk.dev/docs/agents/workflows#orchestrator-worker) pattern: a root agent that plans the research, farms it out to three specialised workers at once, and composes what they return into a brief for a writer, which streams the pitch back for the app to render as an artifact.
 
-<figure class="my-12">
-  <svg viewBox="0 0 1400 420" class="w-full h-auto" role="img" aria-label="Orchestrator-worker diagram: a brand name goes to the root agent, which dispatches tasks to brand-researcher, social-listening and competitor-analysis, whose findings come back and are composed into a brief for write-artifact, which outputs the deck">
-    <defs>
-      <marker id="pc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-        <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--color-muted-foreground)" />
-      </marker>
-    </defs>
-    <g font-family="var(--font-sans), sans-serif" font-size="15" font-weight="500" text-anchor="middle">
-      <g fill="none" stroke="var(--color-muted-foreground)" stroke-width="1.5" marker-end="url(#pc-arrow)">
-        <path d="M 128 210 L 172 210" />
-        <path d="M 428 196 L 556 70" />
-        <path d="M 428 210 L 556 210" />
-        <path d="M 428 224 L 556 350" />
-        <path d="M 844 70 L 972 196" />
-        <path d="M 844 210 L 972 210" />
-        <path d="M 844 350 L 972 224" />
-        <path d="M 1228 210 L 1272 210" />
-      </g>
-      <g font-size="13" font-weight="400" fill="var(--color-muted-foreground)">
-        <text x="470" y="120" transform="rotate(-44 470 120)">task</text>
-        <text x="492" y="200">task</text>
-        <text x="470" y="300" transform="rotate(44 470 300)">task</text>
-        <text x="930" y="120" transform="rotate(44 930 120)">findings</text>
-        <text x="908" y="200">findings</text>
-        <text x="930" y="300" transform="rotate(-44 930 300)">findings</text>
-      </g>
-      <g fill="var(--color-card)" stroke="var(--color-border)" stroke-width="1">
-        <rect x="10" y="180" width="118" height="60" rx="10" />
-        <rect x="178" y="180" width="250" height="60" rx="10" />
-        <rect x="556" y="40" width="288" height="60" rx="10" />
-        <rect x="556" y="180" width="288" height="60" rx="10" />
-        <rect x="556" y="320" width="288" height="60" rx="10" />
-        <rect x="972" y="180" width="256" height="60" rx="10" />
-        <rect x="1272" y="180" width="118" height="60" rx="10" />
-      </g>
-      <g fill="var(--color-foreground)">
-        <text x="69" y="216">brand name</text>
-        <text x="303" y="216">ROOT</text>
-        <text x="700" y="76">brand-researcher</text>
-        <text x="700" y="216">social-listening</text>
-        <text x="700" y="356">competitor-analysis</text>
-        <text x="1100" y="216">write-artifact</text>
-        <text x="1331" y="216">deck</text>
-      </g>
-    </g>
-  </svg>
-  <figcaption class="text-muted-foreground text-sm text-center mt-4">
-    The root dispatches all three at once and composes what comes back into the brief. Nothing else reaches the writer.
-  </figcaption>
-</figure>
+
+<Screenshot src={orchestrator} alt="Orchestrator-worker flow: a brand name goes to the root agent, which sends a task to brand-researcher, social-listening and competitor-analysis, whose findings converge on write-artifact, which outputs the deck" />
 
 
 All three researchers run with reasoning set to none, because they execute a tightly specified search protocol and return a fixed contract, so thinking tokens there pump up latency and tokens without actually making a real impact. The compilation is done by the same root orchestrator agent after reading the result of its subagents.
@@ -185,21 +136,8 @@ Nine slides, and it hits the house grammar on every one: the tension (why does a
 
 The brief being that detailed turned out not to be the thing carrying it, which is the part I did not expect. The judging set was three brand names with no brief at all, so I gave it exactly that, one line each, one shot, no follow-up.
 
-| Prompt | What came back | Slides | Time |
-| --- | --- | --- | --- |
-| "build me a pitch for jio" | [Network of the Nation](/artifacts/pitchcraft/network-of-the-nation-jio.pdf) | 12 | 2m 06s |
-| "build me a pitch for chatgpt" | [Beyond the Prompt](/artifacts/pitchcraft/beyond-the-prompt-chatgpt.pdf) | 9 | 2m 40s |
-| "build me a pitch for coca cola" | [Taste the Table](/artifacts/pitchcraft/taste-the-table-coca-cola.pdf) | 9 | 2m 52s |
-
-
-Under three minutes each, from a handful of words to a named idea in the brand's own livery. Each one resolved the entity first and said which reading it took, which is how ChatGPT came back as OpenAI India rather than as a generic write-up of a chatbot. The brief is not where the content comes from. The research is, and a brand name is enough to start it.
-
-### What I Took From It
-
-I did not win, and I still came away liking this more than almost anything I have built in two days.
-
-What it clarified was mostly about [orbe](/orbe). PitchCraft is orbe's loop with the research turned all the way up: enrich an entity properly, then run repeatable work against it. Orbe enriched a lead and wrote outreach; this enriches a brand and writes a pitch. Sitting in the demo I realised this was the thing I would rather have built into orbe back then, and I am not sure whether what stopped me was time or just not having had the idea yet.
-
-Second prize went to someone who took the same problem statement and built the retrieval version I had specced and cut. His ingestion reads every deck page, transcribes the image-only ones with vision so the slides that carry no extractable text still count, embeds both the pitch cards and the individual slides, scores them on a weighted hybrid, reranks the top eight with a stronger model, and then runs a validator that strips any citation which does not resolve. The result is that his plans can cite a specific slide of a specific past pitch, down to the page.
-
-I have read his repo and not his output, so I am not going to claim anything about whose decks actually read better, and I would not claim mine were the best thing in the room either. But the comparison is useful to me. His citations resolve to a specific slide of a specific past pitch. Mine resolve to the live sources the research actually fetched, and to nothing in the archive at all, because there was nothing in there to point at. Traceability to past work was one of the judging criterion and I had quietly answered a different question instead. A small retrieval loop would have covered it.
+| Prompt | What came back | Time |
+| --- | --- | --- |
+| "build me a pitch for jio" | [Network of the Nation](/artifacts/pitchcraft/network-of-the-nation-jio.pdf)  | 2m 06s |
+| "build me a pitch for chatgpt" | [Beyond the Prompt](/artifacts/pitchcraft/beyond-the-prompt-chatgpt.pdf) | 2m 40s |
+| "build me a pitch for coca cola" | [Taste the Table](/artifacts/pitchcraft/taste-the-table-coca-cola.pdf) | 2m 52s |
