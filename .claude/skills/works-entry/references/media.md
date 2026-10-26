@@ -63,3 +63,23 @@ Compress 4K sources before committing:
 ```sh
 ffmpeg -i in.mov -vf "scale=2048:-2,fps=30" -c:v libx264 -crf 23 -preset slow -an out.mp4
 ```
+
+## Tables
+
+Wrap every table in a `<figure>` with a `<figcaption>` by hand. The blank lines around the markdown
+are what let it parse inside the element.
+
+```mdx
+<figure class="my-12 flex flex-col items-center gap-3">
+
+| Prompt | What came back | Time |
+| --- | --- | --- |
+| "build me a pitch for jio" | [Network of the Nation](/artifacts/...) | 2m 06s |
+
+<figcaption>every deck linked as it came out, unedited</figcaption>
+</figure>
+```
+
+Captions are lowercase, no "Table 1." label, and say what the reader is comparing rather than
+restating the headers. Links inside a table sit in muted foreground and go
+foreground with an underline on hover, so write them as plain markdown links.
