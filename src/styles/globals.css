@@ -181,10 +181,11 @@
 }
 
 .mdx a {
-  padding: 2px 4px;
-  background-color: var(--color-muted);
-  color: var(--color-muted-foreground);
-  font-weight: 500;
+  @apply underline underline-offset-4 transition-colors text-muted-foreground font-medium;
+}
+
+.mdx a:hover {
+  @apply text-foreground;
 }
 
 .mdx h1,
@@ -320,10 +321,7 @@
 }
 
 .mdx table a {
-  @apply bg-transparent text-muted-foreground font-medium underline underline-offset-4;
-  padding: 0;
-  transition: color 150ms;
-  /* keep link labels on one line so their column claims the width it needs */
+  @apply underline underline-offset-4 transition-colors text-muted-foreground font-medium;
   white-space: nowrap;
 }
 
